@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -7,9 +7,10 @@ function App() {
   const [randomItem, setRandomItem] = useState(null)
   const [randomImage1, setRandomImage1] = useState(null)
   const [randomImage2, setRandomImage2] = useState(null)
+  const Random = document.querySelector('.RandomImages');
 
   const fetchItems = async () => {
-    const data = await fetch('src/components/items.json')
+    const data = await fetch('https://bymykel.github.io/CSGO-API/api/en/agents.json')
     const items = await data.json()
     setItems(items)
   }
@@ -32,12 +33,29 @@ function App() {
     setRandomItem(randomItem)
   }
 
+  useEffect(() => {
+    handleClick()
+  }, [])
+
   async function handleClick() {
     await fetchItems()
     randomiseItem()
     randomiseImage1()
     randomiseImage2()
+    Random.style.display = 'flex';
   }
+
+  const [num, setNum] = useState(0);
+
+  const CounterI = () => {
+      setNum (num+1);
+      randomiseItem()
+      randomiseImage1()
+      randomiseImage2()
+      Random.style.display = 'flex';
+  }
+  
+  console.log(num)
 
   return (
     <>
@@ -46,9 +64,9 @@ function App() {
         <button onClick={handleClick}>Randomize Skins</button>
         {randomItem && <p>{randomItem.name}</p>}
         <div className='RandomImages'>
-        <button onClick={handleClick} className='buttontut'> {randomItem && <img src={randomItem.image}/>}</button>
-        <button onClick={handleClick} className='buttontut'> {randomItem && <img src={randomImage1.image}/>}</button>
-        <button onClick={handleClick} className='buttontut'> {randomItem && <img src={randomImage2.image}/>}</button>
+          <button onClick={CounterI} className='buttontut' id='0'> {randomItem && <img src={randomItem.image}/>}</button>
+          <button onClick={handleClick} className='buttontut' id='1'> {randomItem && <img src={randomImage1.image}/>}</button>
+          <button onClick={handleClick} className='buttontut'id='2'> {randomItem && <img src={randomImage2.image}/>}</button>
         </div>
       </div>
     </>
